@@ -1,12 +1,36 @@
 'use client'
 import AddItemDrawer from "@/component/add-item/add-item-drawer";
 import AddLinkButton from "@/component/add-link-button";
+import FirebaseConfig from "@/config/firebase.config";
+import { get, ref } from "firebase/database";
 import { Alert, Modal, ModalBody } from "flowbite-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+const database = FirebaseConfig()
+
+interface Item {
+  title: string,
+  url: string,
+  createdAt: number
+}
 
 export default function LinkAddPage() {
 
   const [viewMode, setViewMode] = useState<'edit' | 'preview'>('edit')
+  const [items, setItems] = useState<Item[]>()
+
+  useEffect(() => {
+    async function getData() {
+      
+      const x = await get(ref(database, `links`))
+      const val = x.val()
+
+      console.log('DATA: ', val)
+      setItems(Object.values(val))
+    }
+
+    getData()
+  }, [])
 
   function handlePrevievButtonClick(): void {
     setViewMode((old) => old == 'edit' ? 'preview' : 'edit')
@@ -24,7 +48,7 @@ export default function LinkAddPage() {
               <path xmlns="http://www.w3.org/2000/svg" d="M34.167,35c8.587,0,16.36,3.535,21.956,9.219c1.406-3.063,2.21-6.458,2.21-10.052C58.333,20.82,47.513,10,34.167,10  C20.82,10,10,20.82,10,34.167c0,3.594,0.804,6.988,2.21,10.052C17.806,38.535,25.579,35,34.167,35z"></path>
             </g>
           </svg>
-          <span className="ml-4 font-semibold text-xl">Linkci</span>
+          <span className="ml-4 font-semibold text-xl">Linkcik</span>
         </div>
         <div className="logo flex items-center px-4 py-2">
           <button onClick={handlePrevievButtonClick} className="bg-gray-50 border border-gray-50 text-[#2564cf] rounded-md text-sm font-semibold py-2 px-3 flex items-center justify-center">
@@ -60,6 +84,15 @@ export default function LinkAddPage() {
           <div className={`grow h-[calc(100dvh-100px)] ${viewMode == 'edit' ? 'block' : 'hidden  md:block'}`}>
             <div className="p-4 flex items-center justify-center">
               <AddLinkButton />
+            </div>
+            <div className="links p-4">
+              {(items && items.length > 0) && (
+                items.map(item => (
+                  <div className="border border-gray-200 hover:border-gray-300 hover:bg-gray-50 rounded-md mb-2">
+                    <a href={item.url} target="_blank" className="block p-4">{item.title}</a>
+                  </div>
+                ))
+              )}
             </div>
           </div>
           <div className={`grow h-[calc(100dvh-100px)] border-l ${viewMode == 'preview' ? 'block' : 'hidden  md:block'}`}>

@@ -1,5 +1,26 @@
+import FirebaseConfig from "@/config/firebase.config"
+import { set, ref, serverTimestamp, push } from "firebase/database";
+import { useState } from "react";
+
+const database = FirebaseConfig()
+
 export default function AddLink() {
-  return  (
+
+  const [linkUrl, setLinkUrl] = useState<string>()
+
+
+  function addLink() {
+    const linksRef = ref(database, `links`)
+    const newDataRef = push(linksRef)
+    set(newDataRef, {
+      url: linkUrl,
+      title: linkUrl,
+      createdAt: serverTimestamp()
+    })
+  }
+
+
+  return (
     <div>
       <label htmlFor="input-group-1" className="block mb-2 text-md font-medium text-gray-900 dark:text-white">Link</label>
       <div className="relative mb-4">
@@ -11,7 +32,7 @@ export default function AddLink() {
             </g>
           </svg>
         </div>
-        <input type="url" id="input-group-1" className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block h-12 w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="New link..."/>
+        <input value={linkUrl} onChange={(e) => setLinkUrl(e.target.value)} type="url" id="input-group-1" className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 block h-12 w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="New link..."/>
       </div>
       <div className="hidden flex items-start mb-6">
         <div className="flex items-center h-5">
@@ -19,7 +40,7 @@ export default function AddLink() {
         </div>
         <label htmlFor="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree with the <a href="#" className="text-blue-600 hover:underline dark:text-blue-500">terms and conditions</a>.</label>
       </div>
-      <button type="submit" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-md h-12 w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
+      <button onClick={addLink} type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-md h-12 w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
     </div>
   )
 }

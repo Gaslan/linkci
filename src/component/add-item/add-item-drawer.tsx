@@ -11,7 +11,8 @@ export default function AddItemDrawer() {
   const [selectedItem, setSelectedItem] = useState<ItemType>()
 
   function handleItemSelect(itemtype: ItemType) {
-    setSelectedItem(itemtype)
+    setTimeout(() => setSelectedItem(itemtype), 200)
+    
   }
 
   function handleCloseDrawer() {

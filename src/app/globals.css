@@ -8,12 +8,12 @@
   --background-end-rgb: 255, 255, 255;
 }
 
-*:focus {
+/* *:focus {
   -webkit-tap-highlight-color: transparent;
   outline: none;
   -ms-touch-action: manipulation;
   touch-action: manipulation;
-}
+} */
 
 @media (prefers-color-scheme: dark) {
   :root {
