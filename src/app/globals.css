@@ -25,6 +25,8 @@
 
 body {
   color: rgb(var(--foreground-rgb));
+  background-color: #f4f7fb;
+  background-color: #f4f6f8;
 }
 
 
@@ -34,4 +36,28 @@ body {
   height: calc(100dvh - 120px);
   width: 100%;
   margin-top: 120px;
+}
+
+.topbar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background-color: #fff;
+  border-bottom: 1px solid rgb(229, 231, 235);
+  color: #2564cf;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topnav{
+  position: fixed;
+  top: 56px;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background-color: #fff;
+  border-bottom: 1px solid rgb(229, 231, 235);
 }
