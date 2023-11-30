@@ -7,7 +7,6 @@ import LinkListItem from "@/component/link-list-item";
 import FirebaseConfig from "@/config/firebase.config";
 import { Item, ViewMode } from "@/config/types";
 import { get, ref } from "firebase/database";
-import { Alert, Modal, ModalBody } from "flowbite-react";
 import { useState, useEffect } from "react";
 
 const database = FirebaseConfig()
@@ -18,16 +17,15 @@ export default function LinkAddPage() {
   const [items, setItems] = useState<Item[]>()
 
   useEffect(() => {
-    async function getData() {
-      
-      const x = await get(ref(database, `links`))
-      const val = x.val()
-      const data = Object.entries(val).map(([key, value]) => ({...(value as Item), id: key}))
-      setItems(data)
-    }
-
     getData()
   }, [])
+
+  async function getData() {
+    const x = await get(ref(database, `links`))
+    const val = x.val()
+    const data = Object.entries(val).map(([key, value]) => ({...(value as Item), id: key}))
+    setItems(data)
+  }
 
   function handlePrevievButtonClick(viewMode: ViewMode) {
     setViewMode(viewMode == 'edit' ? 'preview' : 'edit')
@@ -39,6 +37,10 @@ export default function LinkAddPage() {
     }
     const newItems = items.filter(x => x.id !== item.id)
     setItems([...newItems])
+  }
+
+  function handleLinkAdded() {
+    getData()
   }
 
   return (
@@ -54,7 +56,7 @@ export default function LinkAddPage() {
         <div className="flex items-center justify-center h-[calc(100dvh-120px)]">
           <div className={`grow h-[calc(100dvh-120px)] ${viewMode == 'edit' ? 'block' : 'hidden  md:block'}`} style={{overflowY: 'auto'}}>
             <div className="px-4 py-6 flex items-center justify-center">
-              <AddLinkButton />
+              <AddLinkButton onLinkAdded={handleLinkAdded} />
             </div>
             <div className="links px-4">
               {(items && items.length > 0) && (
@@ -71,8 +73,6 @@ export default function LinkAddPage() {
           </div>
         </div>
       </div>
-
-      <AddItemDrawer />
     </>
   )
 }

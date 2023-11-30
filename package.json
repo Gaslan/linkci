@@ -9,11 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.19",
+    "@mui/material": "^5.14.19",
     "clsx": "^2.0.0",
     "firebase": "^10.7.0",
-    "flowbite": "^2.2.0",
-    "flowbite-react": "^0.7.0",
     "next": "14.0.3",
+    "postcss-nesting": "^12.0.1",
     "react": "^18",
     "react-dom": "^18"
   },
