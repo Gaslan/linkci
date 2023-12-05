@@ -1,8 +1,8 @@
 import { useState } from "react"
 import SelectItems from "./select-items"
-import AddLink from "./add-link"
 import AddDivider from "./add-divider"
 import AddText from "./add-text"
+import AddLink from "../items/link/add-link"
 
 export type ItemType = 'link' | 'divider' | 'text'
 
@@ -45,8 +45,8 @@ export default function AddItemDrawer({onLinkAdded}: {onLinkAdded: () => void}) 
   }
 
   return  (
-    <div id="drawer-bottom-example" className=" w-full p-4 rounded-t-md overflow-y-auto transition-transform bg-white dark:bg-gray-800">
-      <h5 id="drawer-bottom-label" className="inline-flex items-center mb-8 text-lg font-semibold text-gray-400 dark:text-gray-400">
+    <div id="drawer-bottom-example" className=" w-full rounded-t-md overflow-y-auto transition-transform bg-white dark:bg-gray-800">
+      {/* <h5 id="drawer-bottom-label" className="inline-flex items-center mb-8 text-lg font-semibold text-gray-400 dark:text-gray-400">
         {selectedItem && (
           <button onClick={() => setSelectedItem(undefined)} type="button" className="-ms-2 me-4 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-full w-8 h-8 text-sm inline-flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 256 256">
@@ -55,7 +55,8 @@ export default function AddItemDrawer({onLinkAdded}: {onLinkAdded: () => void}) 
           </button>
         )}
         { getTitle() }
-      </h5>
+      </h5> */}
+
       { getView() }
     </div>
   )
