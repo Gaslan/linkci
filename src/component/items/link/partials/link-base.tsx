@@ -1,8 +1,9 @@
 import { useState, useRef, forwardRef, useImperativeHandle } from "react";
-import LinkContent, { LinkContentHandle } from "./link-content";
+import LinkContentComponent, { LinkContentHandle } from "./link-content";
 import LinkTitle from "./link-title";
 import LinkTopMenu, { Tabs } from "./link-top-menu";
-import { Link } from "../link.types";
+import { Link, LinkContent } from "../link.types";
+import LinkDesignComponent from "./link-design";
 
 export interface LinkBaseHandle {
   getContentData: () => LinkContent | undefined
@@ -31,14 +32,14 @@ const LinkBase = forwardRef<LinkBaseHandle, LinkBaseProps>(function LinkBase({li
   }
 
   return (
-    <div>
+    <div className="grow">
       <LinkTitle title="Link" />
       <LinkTopMenu onTabChange={handleTabChange} />
       {tabValue == 'content' && (
-        <LinkContent link={link} ref={contentRef} />
+        <LinkContentComponent link={link} ref={contentRef} />
       )}
       {tabValue == 'design' && (
-        <div>Design Tab</div>
+        <LinkDesignComponent />
       )}
       {/* <button onClick={addLink} type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-md h-12 w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button> */}
     </div>

@@ -100,7 +100,7 @@ export default function ItemsMain({viewMode}: ItemMainProps) {
         </div>
       </div>
     
-      <Drawer
+      <Drawer sx={{'& .MuiPaper-root': {height: '100%'}}}
         anchor="bottom"
         open={drawerOpen}
         onClose={handleDrawerClose}>

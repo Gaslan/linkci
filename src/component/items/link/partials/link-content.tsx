@@ -9,7 +9,7 @@ interface LinkContentProps {
   link: Link
 }
 
-const LinkContent = forwardRef<LinkContentHandle, LinkContentProps>(function LinkContent({link}: LinkContentProps, ref) {
+const LinkContentComponent = forwardRef<LinkContentHandle, LinkContentProps>(function LinkContent({link}: LinkContentProps, ref) {
 
   const [title, setTitle] = useState(link.content?.title)
   const [url, setUrl] = useState(link.content?.url)
@@ -27,7 +27,7 @@ const LinkContent = forwardRef<LinkContentHandle, LinkContentProps>(function Lin
   })
 
   return (
-    <div className="p-4 text-sm bg-[#f2f3f5]">
+    <div className="p-4 text-sm">
       <label htmlFor="input-group-1" className="block mb-2 text-md font-medium text-gray-900 dark:text-white">Title</label>
       <div className="relative mb-4">
         <div className="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none">
@@ -62,4 +62,4 @@ const LinkContent = forwardRef<LinkContentHandle, LinkContentProps>(function Lin
   )
 })
 
-export default LinkContent
+export default LinkContentComponent
