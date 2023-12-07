@@ -94,7 +94,11 @@ export default function Border({value, onClose}: BorderProps) {
               onChange={handleBorderWidthChange}
             />
           </Box>
-          <Divider />
+
+          <Box paddingY={'.5rem'} px={'1.5rem'}>
+            <Divider />
+          </Box>
+
           <Box paddingY={'1rem'} px={'1.5rem'}>
             <Typography paddingBottom={'1rem'} color={'#000'} fontWeight={500} fontSize={'1.125rem'} textAlign={'left'} textTransform={'none'}>Border Color</Typography>
             <Box display={'flex'} alignItems={'center'} flexWrap={'wrap'} gap={'6px'}>
@@ -115,7 +119,9 @@ export default function Border({value, onClose}: BorderProps) {
             </Box>
           </Box>
 
-          <Divider />
+          <Box paddingY={'.5rem'} px={'1.5rem'}>
+            <Divider />
+          </Box>
 
           
           <Box paddingY={'1rem'} px={'1.5rem'}>
