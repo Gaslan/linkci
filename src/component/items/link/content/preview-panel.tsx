@@ -1,8 +1,8 @@
 import { Box } from "@mui/material"
-import { Design } from "../partials/link-design"
+import { LinkDesign } from "../link.types"
 
 interface PreviewPanelProps {
-  designValue: Design
+  designValue: LinkDesign
 }
 
 export default function PreviewPanel({designValue}: PreviewPanelProps) {
