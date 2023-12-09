@@ -45,7 +45,7 @@ export default function AddItemDrawer({onLinkAdded}: {onLinkAdded: () => void}) 
   }
 
   return  (
-    <div id="drawer-bottom-example" className="flex flex-col w-full h-full rounded-t-md overflow-y-auto transition-transform bg-[#f5f7fa] dark:bg-gray-800">
+    <div id="drawer-bottom-example" className="flex flex-col w-full h-full flex flex-col rounded-t-md transition-transform bg-[#f5f7fa] dark:bg-gray-800 relative">
       { getView() }
     </div>
   )

@@ -1,12 +1,13 @@
-import { useRef } from "react";
-import LinkBase, { LinkBaseHandle } from "./partials/link-base";
+import { useRef, useState } from "react";
+import LinkBase from "./partials/link-base";
 import { push, ref, serverTimestamp, set } from "firebase/database";
 import FirebaseConfig from "@/config/firebase.config";
 import { Link } from "./link.types";
 
-const link: Link = {
+const initialValue: Link = {
   id: '',
   type: 'link',
+  createdAt: '',
   content: {
     title: '',
     subTitle:'',
@@ -15,8 +16,9 @@ const link: Link = {
   design: {
     backgroundColor: '',
     borderRadius: '',
-    textColor:'',
-    icon: ''
+    color: '',
+    borderColor: '',
+    borderWidth: 0
   }
 }
 
@@ -24,42 +26,32 @@ const database = FirebaseConfig()
 
 export default function AddLink({onItemAdded}: {onItemAdded: () => void}) {
 
-  const linkBaseRef = useRef<LinkBaseHandle>(null)
+  const[link, setLink] = useState<Link>(initialValue)
 
   async function addLink() {
-    const refHandler = linkBaseRef.current
-    if (!refHandler) {
-      return
-    }
-    
-    const content = refHandler.getContentData()
-    console.log(content)
-
     try {
       const linksRef = ref(database, `links`)
       const newDataRef = await push(linksRef)
       await set(newDataRef, {
         type: 'link',
-        content: {
-          url: content?.url,
-          title: content?.title,
-          createdAt: serverTimestamp()
-        },
-        design: {
-
-        }
+        createdAt: serverTimestamp(),
+        content: link.content,
+        design: link.design
       })
       onItemAdded()
     } catch (error) {
       console.log('ERROR: ' + error)
     }
-    
+  }
+
+  function handleDataChange(value: Link) {
+    setLink(value)
   }
 
   return (
     <>
-      <LinkBase link={link} ref={linkBaseRef} />
-      <div className="p-4">
+      <LinkBase link={link} onDataChange={handleDataChange} />
+      <div className="p-4 fixed bottom-0 w-full">
         <button onClick={addLink} type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-md h-12 w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
       </div>
     </>

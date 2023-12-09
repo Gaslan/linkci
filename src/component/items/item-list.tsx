@@ -1,8 +1,5 @@
-import toast from "react-hot-toast"
 import ItemListItem from "./item-list-item"
 import { Item } from "./link/link.types"
-import { useState } from "react"
-import { Drawer } from "@mui/material"
 
 interface ItemListProps {
   items: Item[]
@@ -11,7 +8,7 @@ interface ItemListProps {
 }
 
 export default function ItemList({items, onItemDelete, onItemUpdate}: ItemListProps) {
-  // console.log('Items lis', itemList)
+  console.log('Items lis', items)
   
   // const [items, setItems] = useState<Item[]>(itemList)
 

@@ -2,7 +2,7 @@ import { IconButton } from "@mui/material";
 
 export default function LinkTitle({title}: {title: string}) {
   return (
-    <div className="panel-title w-full px-4 py-3 rounded-t-md overflow-y-auto transition-transform bg-white dark:bg-gray-800 flex items-center justify-between">
+    <div className="panel-title w-full h-[60px] max-h-[60px] min-h-[60px] px-4 rounded-t-md transition-transform bg-white dark:bg-gray-800 flex items-center justify-between">
       <h5 id="drawer-bottom-label" className="inline-flex items-center text-lg font-semibold text-gray-400 dark:text-gray-400">
         { title }
       </h5>

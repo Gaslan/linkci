@@ -1,73 +1,179 @@
-import { useState } from "react";
-import { Button, ButtonGroup, Box, Typography, Drawer, Stack } from "@mui/material";
-import BorderRadius, { BorderRadiusValue } from "../content/border-radius";
-import Border, { BorderValue } from "../content/border";
+import { forwardRef, useImperativeHandle, useState } from "react";
+import { Box, Typography, Drawer, Stack, Divider, Slider } from "@mui/material";
+import { BorderRadiusValue } from "../content/border-radius";
+import RadioOptionsList from "../content/radio-options-list";
+import Color from "../content/color";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { Link, LinkDesign } from "../link.types";
 
-interface LinkDesignComponentProps {
-  
+interface LinkDesignProps {
+  link: Link
+  onDataChange: (value: LinkDesign) => void
 }
 
-type ProcessType = 'border' | 'border-radius'
+type ProcessType = 'border' | 'border-radius' | 'color'
 
-export default function LinkDesignComponent({}: LinkDesignComponentProps) {
+const initialValue: LinkDesign = {
+  borderColor: '#ddd',
+  borderWidth: 1,
+  borderRadius: 'medium',
+  backgroundColor: '#aaa',
+  color: '#567'
+}
+
+
+export default function LinkDesignComponent({link, onDataChange}: LinkDesignProps) {
 
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [activeProcess, setActiveProcess] = useState<ProcessType>()
-  const [borderRadiusValue, setBorderRadiusValue] = useState<BorderRadiusValue>('none')
-  const [borderValue, setBorderValue] = useState<BorderValue>({width: 1, color: '#222', borderRadius: 'none'})
+  const [design, setDesign] = useState<LinkDesign>(link.design)
+  const [colorSelectType, setColorSelectType] = useState<keyof LinkDesign>()
+  const [colorSelectValue, setColorSelectValue] = useState<string>()
 
-  function handleBorderRadiusOpen() {
+  function handleBorderWidthChange(event: Event, value: number | number[], activeThumb: number) {
+    updateDesignState('borderWidth', typeof value == 'number' ? value : 0)
+  }
+
+  function handleBorderRadiusClick(radius: BorderRadiusValue) {
+    updateDesignState('borderRadius', radius)
+  }
+
+  function updateDesignState(key: string, value: string | number) {
+    setDesign(old => ({...old, [key]: value}))
+    onDataChange({...link.design, [key]: value})
+  }
+
+  function parseRadius(value: string) {
+    switch (value) {
+      case 'none':
+        return 0
+      case 'medium':
+        return 16
+      case 'full':
+        return 30
+      default:
+        return 0;
+    }
+  }
+
+  function handleColorSelectButtonClick(type: keyof LinkDesign, value: string) {
     setDrawerOpen(true)
-    setActiveProcess('border-radius')
+    setActiveProcess('color')
+    setColorSelectType(type)
+    setColorSelectValue(value)
   }
 
-  function handleBorderOpen() {
-    setDrawerOpen(true)
-    setActiveProcess('border')
-  }
-
-  function handleBorderRadiusClose(value: BorderRadiusValue) {
+  function handleColorSelectClose(value: string, type: keyof LinkDesign) {
     setDrawerOpen(false)
-    setBorderRadiusValue(value)
     setActiveProcess(undefined)
+    setColorSelectType(undefined)
+    setColorSelectValue(undefined)
+    updateDesignState(type, value)
   }
 
-  function handleBorderClose(value: BorderValue) {
-    setDrawerOpen(false)
-    setBorderValue(value)
-    setActiveProcess(undefined)
-  }
+  
 
   return (
-    <div>
-      <Box paddingY={'1rem'}>
-        <ButtonGroup orientation="vertical" fullWidth>
-          <Button onClick={() => setTimeout(handleBorderRadiusOpen, 300)} sx={{px: '1rem', py: 0, borderRadius: '1rem', border: 0, bgcolor: '#fff!important', '&:hover': {border: 0}, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', width: '100%'}}>
-            <Typography variant="h4" fontSize={'.875rem'}>Border Radius</Typography>
-            <Box>
-              <span>{borderRadiusValue}</span>
+    <div style={{height: 'calc(100dvh - 110px)', maxHeight: 'calc(100dvh - 110px)', display: 'flex', flexDirection:'column'}}>
+      <Box>
+        <Box padding={'1rem 0'}>
+          <Box borderRadius={'1rem'} bgcolor={'#fff'} px={'1.5rem'} py={'1rem'}>
+            <Box display={'flex'} flexDirection={'column'} justifyContent={'space-evenly'} bgcolor={design.backgroundColor} border={`${design.borderWidth}px solid ${design.borderColor}`} position={'relative'} width={'100%'} height={'60px'} borderRadius={`${parseRadius(design.borderRadius)}px`}>
+              <Box marginLeft={'2rem'} width={'30%'} height={'10px'} borderRadius={'6px'} bgcolor={design.color}></Box>
+              <Box marginLeft={'2rem'} width={'80%'} height={'10px'} borderRadius={'6px'} bgcolor={design.color}></Box>
             </Box>
-          </Button>
-          <Button onClick={() => setTimeout(handleBorderOpen, 300)} sx={{px: '1rem', py: 0, borderRadius: '1rem', border: 0, bgcolor: '#fff!important', '&:hover': {border: 0}, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '1rem', width: '100%'}}>
-            <Typography variant="h4" fontSize={'.875rem'}>Border</Typography>
-            <Box>
-              <Stack direction={'row'} alignItems={'center'} gap={'12px'}>
-                <span>{borderValue.width}px</span>
-                <Box width={'32px'} height={'32px'} bgcolor={borderValue.color} borderRadius={'16px'}></Box>
-              </Stack>
-            </Box>
-          </Button>
-        </ButtonGroup>
+          </Box>
+        </Box>
       </Box>
+
+      <Box sx={{overflow: 'auto', pb: '80px'}}>
+        <Box paddingBottom={'1rem'} px={'1.5rem'}>Text</Box>
+
+        <Box bgcolor={'#fff'} borderRadius={'1rem'} mb={'1rem'} py={'.5rem'}>
+          <Box onClick={() => handleColorSelectButtonClick("backgroundColor", design.backgroundColor)} display={'flex'} alignItems={'center'} justifyContent={'space-between'} paddingY={'1rem'} px={'1.5rem'} sx={{cursor: 'pointer'}}>
+            <Typography color={'#000'} fontWeight={500} fontSize={'1.125rem'} textAlign={'left'} textTransform={'none'}>Background Color</Typography>
+            <Stack direction={'row'} alignItems={'center'} gap={'12px'}>
+              <Box width={'32px'} height={'32px'} bgcolor={design.backgroundColor} borderRadius={'16px'}></Box>
+              <Icon icon="tabler:chevron-right" />
+            </Stack>
+          </Box>
+          <Box paddingY={'.5rem'} px={'1.5rem'}>
+            <Divider />
+          </Box>
+          <Box onClick={() => handleColorSelectButtonClick("color", design.color)} display={'flex'} alignItems={'center'} justifyContent={'space-between'} paddingY={'1rem'} px={'1.5rem'} sx={{cursor: 'pointer'}}>
+            <Typography color={'#000'} fontWeight={500} fontSize={'1.125rem'} textAlign={'left'} textTransform={'none'}>Text Color</Typography>
+            <Stack direction={'row'} alignItems={'center'} gap={'12px'}>
+              <Box width={'32px'} height={'32px'} bgcolor={design.color} borderRadius={'16px'}></Box>
+              <Icon icon="tabler:chevron-right" />
+            </Stack>
+          </Box>
+        </Box>
+
+        <Box paddingBottom={'1rem'} px={'1.5rem'}>Border</Box>
+        <Box bgcolor={'#fff'} borderRadius={'1rem'}>
+          <Box paddingY={'1rem'} px={'1.5rem'}>
+            <Typography paddingBottom={'1rem'} color={'#000'} fontWeight={500} fontSize={'1.125rem'} textAlign={'left'} textTransform={'none'}>Border Width</Typography>
+            <Slider
+              defaultValue={1}
+              valueLabelDisplay="auto"
+              step={1}
+              marks
+              min={0}
+              max={10}
+              value={design.borderWidth}
+              onChange={handleBorderWidthChange}
+            />
+          </Box>
+
+          <Box paddingY={'.5rem'} px={'1.5rem'}>
+            <Divider />
+          </Box>
+
+          <Box onClick={() => handleColorSelectButtonClick("borderColor", design.borderColor)} display={'flex'} alignItems={'center'} justifyContent={'space-between'} paddingY={'1rem'} px={'1.5rem'} sx={{cursor: 'pointer'}}>
+            <Typography color={'#000'} fontWeight={500} fontSize={'1.125rem'} textAlign={'left'} textTransform={'none'}>Border Color</Typography>
+            <Stack direction={'row'} alignItems={'center'} gap={'12px'}>
+              <Box width={'32px'} height={'32px'} bgcolor={design.borderColor} borderRadius={'16px'}></Box>
+              <Icon icon="tabler:chevron-right" />
+            </Stack>
+          </Box>
+
+          <Box paddingY={'.5rem'} px={'1.5rem'}>
+            <Divider />
+          </Box>
+
+          
+          <Box paddingY={'1rem'} px={'1.5rem'}>
+            <Typography paddingBottom={'1rem'} color={'#000'} fontWeight={500} fontSize={'1.125rem'} textAlign={'left'} textTransform={'none'}>Border Radius</Typography>
+            <RadioOptionsList 
+              options={[
+                {
+                  name: "None",
+                  description: 'No border radius',
+                  value: 'none'
+                },
+                {
+                  name: "Medium",
+                  description: 'Medium size border radius',
+                  value: 'medium'
+                },
+                {
+                  name: "Full",
+                  description: 'Full border radius',
+                  value: 'full'
+                }
+              ]} 
+              value={link.design.borderRadius}
+              onChange={(value) => {handleBorderRadiusClick(value.value as BorderRadiusValue)}} />
+          </Box>
+        </Box>
+      </Box>
+
       <Drawer sx={{'& .MuiPaper-root': {height: '100%', bgcolor: '#f5f7fa'}}}
         anchor="bottom"
         open={drawerOpen}
         onClose={() => setDrawerOpen(false)}>
-          {activeProcess == 'border-radius' && (
-            <BorderRadius value={borderRadiusValue} onClose={handleBorderRadiusClose} />
-          )}
-          {activeProcess == 'border' && (
-            <Border value={borderValue} onClose={handleBorderClose} />
+          {activeProcess == 'color' && (
+            <Color design={design} value={colorSelectValue ?? ''} type={colorSelectType ?? 'color'} onClose={handleColorSelectClose} />
           )}
       </Drawer>
     </div>
