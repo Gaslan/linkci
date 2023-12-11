@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Item, Link } from "./link/link.types";
 import ListItemDeleteButton from "../list-item-delete-button";
 import ListItemEditButton from "../list-item-edit-button";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface LinkListItemProps {
   item: Item, 
@@ -16,6 +18,13 @@ const database = FirebaseConfig()
 export default function ItemListItem({item, onItemDelete, onItemUpdate}: LinkListItemProps) {
 
   const [expanded, setExpanded] = useState<boolean>(false)
+
+  const {attributes, listeners, setNodeRef, setActivatorNodeRef, transform, transition} = useSortable({id: item.id})
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition
+  }
 
   function handleExpandButtonClick(value: boolean) {
     setExpanded(!value)
@@ -51,9 +60,9 @@ export default function ItemListItem({item, onItemDelete, onItemUpdate}: LinkLis
   }
 
   return (
-    <div className="border border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 rounded-md mb-2">
+    <div ref={setNodeRef} style={style} {...attributes} className="border border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 rounded-md mb-2">
       <div className="rounded-md flex items-center" onClick={() => handleExpandButtonClick(expanded)} style={{userSelect: 'none', cursor: 'pointer'}}>
-        <div className="flex items-center px-4">
+        <div className="flex items-center px-4" ref={setActivatorNodeRef} {...listeners}>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
             <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.6" d="M14 18a1 1 0 1 0 2 0a1 1 0 0 0-2 0Zm-6 0a1 1 0 1 0 2 0a1 1 0 0 0-2 0Zm6-6a1 1 0 1 0 2 0a1 1 0 0 0-2 0Zm-6 0a1 1 0 1 0 2 0a1 1 0 0 0-2 0Zm6-6a1 1 0 1 0 2 0a1 1 0 0 0-2 0ZM8 6a1 1 0 1 0 2 0a1 1 0 0 0-2 0Z"/>
           </svg>

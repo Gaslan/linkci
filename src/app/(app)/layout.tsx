@@ -1,7 +1,7 @@
 'use client'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './globals.css'
+import '../globals.css'
 import { Toaster } from 'react-hot-toast'
 import { ThemeProvider, createTheme } from '@mui/material'
 
@@ -21,16 +21,17 @@ export default function RootLayout({
   const theme = createTheme()
 
   return (
-    // <>{children}</>
-    <html lang="en">
-      <head>
-      </head>
-      <body className={inter.className}>
-        <ThemeProvider theme={theme}>
-          <Toaster position="top-center" />
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+    
+    <>{children}</>
+    // <html lang="en">
+    //   <head>
+    //   </head>
+    //   <body className={inter.className} style={{    height: '100dvh', overflow: 'hidden!important'}}>
+    //     <ThemeProvider theme={theme}>
+    //       <Toaster position="top-center" />
+    //       {children}
+    //     </ThemeProvider>
+    //   </body>
+    // </html>
   )
 }

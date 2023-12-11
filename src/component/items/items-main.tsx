@@ -10,6 +10,7 @@ import { ViewMode } from "@/config/types"
 import AddItemDrawer from "../add-item/add-item-drawer"
 import UpdateLink from "./link/update-link"
 import Preview from "../preview/preview"
+import { arrayMove } from "@dnd-kit/sortable"
 
 const database = FirebaseConfig()
 
@@ -82,6 +83,12 @@ export default function ItemsMain({viewMode}: ItemMainProps) {
     return null
   }
 
+  function handleItemOrderChange(oldIndex: number, newIndex: number): void {
+    setItems(old => {
+      return old ? arrayMove(old, oldIndex, newIndex) : old
+    })
+  }
+
   return (
     <>
       <div className="flex items-center justify-center h-[calc(100dvh-120px)]">
@@ -89,7 +96,7 @@ export default function ItemsMain({viewMode}: ItemMainProps) {
           <div className="px-4 py-6 flex items-center justify-center">
             <AddLinkButton onLinkAdded={handleLinkAdded} onButtonClick={handleAddButtonClick}  />
           </div>
-          <ItemList items={items ?? []} onItemDelete={handleItemDelete} onItemUpdate={handleItemUpdate} />
+          <ItemList items={items ?? []} onItemDelete={handleItemDelete} onItemUpdate={handleItemUpdate} onItemOrderChange={handleItemOrderChange} />
         </div>
         <div className={`grow h-[calc(100dvh-120px)] border-l ${viewMode == 'preview' ? 'block' : 'hidden  md:block'}`}>
           <div className="w-full h-full flex p-6">

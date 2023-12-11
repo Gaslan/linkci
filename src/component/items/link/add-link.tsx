@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import LinkBase from "./partials/link-base";
 import { push, ref, serverTimestamp, set } from "firebase/database";
 import FirebaseConfig from "@/config/firebase.config";
