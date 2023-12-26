@@ -75,7 +75,7 @@ export default function ItemsMain({viewMode}: ItemMainProps) {
 
   function activeProcessView() {
     if (activeProcess == 'addItem') {
-      return <AddItemDrawer onLinkAdded={handleLinkAdded} />
+      return <AddItemDrawer onLinkAdded={handleLinkAdded} onClose={handleDrawerClose} />
     }
     if (activeProcess == 'updateLink') {
       return <UpdateLink link={{} as Link} onUpdated={handleItemUpdate} />

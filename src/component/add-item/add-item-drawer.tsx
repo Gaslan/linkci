@@ -3,10 +3,16 @@ import SelectItems from "./select-items"
 import AddDivider from "./add-divider"
 import AddText from "./add-text"
 import AddLink from "../items/link/add-link"
+import HeaderMain from "../items/header/header-main"
 
-export type ItemType = 'link' | 'divider' | 'text'
+export type ItemType = 'link' | 'divider' | 'text' | 'header'
 
-export default function AddItemDrawer({onLinkAdded}: {onLinkAdded: () => void}) {
+interface AddItemDrawerProps {
+  onLinkAdded: () => void
+  onClose: () => void
+}
+
+export default function AddItemDrawer({onLinkAdded, onClose}: AddItemDrawerProps) {
 
   const [selectedItem, setSelectedItem] = useState<ItemType>()
 
@@ -26,6 +32,8 @@ export default function AddItemDrawer({onLinkAdded}: {onLinkAdded: () => void}) 
         return <AddDivider />
       case 'text':
         return <AddText />
+      case 'header':
+        return <HeaderMain onClose={onClose} />
       default:
         return <SelectItems onItemSelect={handleItemSelect} />
     }
