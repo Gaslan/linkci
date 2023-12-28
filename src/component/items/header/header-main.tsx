@@ -10,7 +10,9 @@ const initialHeaderValue: Item = {
     header: ''
   },
   design: {
-
+    color: '#f00',
+    fontSize: 16,
+    fontWeight: 500
   }
 }
 
@@ -24,7 +26,9 @@ export interface HeaderContent {
 }
 
 export interface HeaderDesign {
-
+  color: string,
+  fontSize: number,
+  fontWeight: number
 }
 
 interface HeaderMainProps {
@@ -44,6 +48,10 @@ export default function HeaderMain({onClose}: HeaderMainProps) {
     setHeader(old => ({...old, content: value}))
   }
 
+  function handleHeaderDesignChange(value: HeaderDesign) {
+    setHeader(old => ({...old, design: value}))
+  }
+
   return (
     <>
       <ItemTitle title="Header" onClose={onClose} />
@@ -52,7 +60,7 @@ export default function HeaderMain({onClose}: HeaderMainProps) {
         <ItemContentComponent item={header} onDataChange={handleHeaderDataChange} />
       )}
       {tabValue == 'design' && (
-        <ItemDesignComponent />
+        <ItemDesignComponent item={header} onDataChange={handleHeaderDesignChange} />
       )}
     </>
   )
